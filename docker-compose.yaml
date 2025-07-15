@@ -1,6 +1,6 @@
 services:
   spring-boot-app:
-    image: celis227/spring-boot-app:1.0
+    image: celis227/spring-boot-app:latest
     container_name: spring-boot-app
     ports:
       - "8081:8081"
