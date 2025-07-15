@@ -7,12 +7,14 @@ services:
     networks:
       - spring-network
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/user_management
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: rootpassword
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    entrypoint: ["./wait-for-it.sh", "database:3306", "--", "java", "-jar", "app.jar"]
 
   database:
     image: mysql:8.0
