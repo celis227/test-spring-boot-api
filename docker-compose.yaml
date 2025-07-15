@@ -26,6 +26,11 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - spring-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   spring-network:
