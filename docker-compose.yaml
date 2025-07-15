@@ -3,7 +3,7 @@ services:
     image: celis227/spring-boot-app:1.0
     container_name: spring-boot-app
     ports:
-      - "8080:8080"
+      - "8081:8081"
     networks:
       - spring-network
     depends_on:
