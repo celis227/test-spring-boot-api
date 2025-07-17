@@ -1,0 +1,23 @@
+# kong-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: my-app-ingress
+ namespace: api-demo
+ annotations:
+   konghq.com/strip-path: "false"
+   konghq.com/plugins: sample-api-key-plugin,sample-ratelimit-plugin   # Plugin names referenced in KongPlugin resources
+   kubernetes.io/ingress.class: kong
+   konghq.com/methods: "GET, POST"  
+spec:
+ ingressClassName: kong
+ rules:
+   - http:
+       paths:
+         - path: /api/users
+           pathType: Prefix
+           backend:
+             service:
+               name: springboot-crud-svc   # Name of your K8s Service
+               port:
+                 number: 8081    # Port exposed by your Service

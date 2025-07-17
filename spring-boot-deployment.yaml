@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: springboot-crud-deployment
+  namespace: api-demo
 spec:
   selector:
     matchLabels:
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
         - name: springboot-crud-k8s
-          image: 'celis227/spring-boot-app:f400c4a'
+          image: 'celis227/spring-boot-app:0e0a7e9'
           ports:
             - containerPort: 8081
           env:   # Setting Enviornmental Variables
@@ -33,6 +34,7 @@ apiVersion: v1 # Kubernetes API version
 kind: Service # Kubernetes resource kind we are creating
 metadata: # Metadata of the resource kind we are creating
   name: springboot-crud-svc
+  namespace: api-demo
 spec:
   selector:
     app: springboot-k8s-mysql
@@ -40,4 +42,4 @@ spec:
     - protocol: "TCP"
       port: 8081 # The port that the service is running on in the cluster
       targetPort: 8081 # The port exposed by the service
-  type: NodePort # type of the service.
+#  type: NodePort # type of the service.
