@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-database
+  labels:
+    app: mysql-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-database
+  template:
+    metadata:
+      labels:
+        app: mysql-database
+    spec:
+      containers:
+        - name: mysql-database
+          image: mysql:8.0
+          ports:
+            - containerPort: 3307
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: rootpassword
+            - name: MYSQL_DATABASE
+              value: user_management
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+                - -u
+                - root
+                - --password=rootpassword
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+                - -u
+                - root
+                - --password=rootpassword
+            initialDelaySeconds: 30
+            periodSeconds: 10
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-database
+spec:
+  selector:
+    app: mysql-database
+  ports:
+    - protocol: TCP
+      port: 3307
+      targetPort: 3307
+  type: ClusterIP
